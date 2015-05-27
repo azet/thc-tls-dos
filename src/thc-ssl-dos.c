@@ -137,12 +137,13 @@ init_vars(void)
 	SSL_CTX_set_options(g_opt.ctx, SSL_OP_ALLOW_UNSAFE_LEGACY_RENEGOTIATION);
 	/* Always guarantee we can connect to unpatched SSL Servers */
 	SSL_CTX_set_options(g_opt.ctx, SSL_OP_LEGACY_SERVER_CONNECT);
+  SSL_CTX_set_options(g_opt.ctx, SSL_OP_ALL);
 #endif
 	/* AES256-SHA              SSLv3 Kx=RSA      Au=RSA  Enc=AES(256) */
 	/* RC4-MD5                 SSLv3 Kx=RSA      Au=RSA  Enc=RC4(128) */
 	/* RSA_decrypt() is 15x slower (used for Kx) than RSA_encrypt() */
-	SSL_CTX_set_cipher_list(g_opt.ctx, "AES256-SHA:RC4-MD5");
-	//SSL_CTX_set_cipher_list(g_opt.ctx, "AES256-SHA");
+	//SSL_CTX_set_cipher_list(g_opt.ctx, "ECDHE-RSA-AES256-SHA");
+	SSL_CTX_set_cipher_list(g_opt.ctx, "AES256-SHA");
 	//SSL_CTX_set_cipher_list(g_opt.ctx, "RC4-MD5");
 	//SSL_CTX_set_options(g_opt.ctx, SSL_OP_NO_TLSv1);
 	//SSL_CTX_set_options(ctx, SSL_OP_LEGACY_SERVER_CONNECT);
@@ -225,7 +226,7 @@ do_getopt(int argc, char *argv[])
 	if (g_opt.ip == -1)
 		ERREXIT("ERROR: Invalid target IP address\n");
 
-#if 1
+#if 0
 	if (skipdelay_flag == 0)
 	{
 		printf("Waiting for script kiddies to piss off.");
@@ -329,7 +330,7 @@ ssl_connect_io(struct _peer *p)
 	if (ret == 1)
 	{
 		g_opt.stat.total_ssl_connect++;
-#if 0
+#if 1 
 		if (!(g_opt.flags & FL_OUTPUT_SR_ONCE))
 		{
 			g_opt.flags |= FL_OUTPUT_SR_ONCE;
@@ -728,4 +729,5 @@ printf(""
 	exit(0);
 	return 0;
 }
+
 
